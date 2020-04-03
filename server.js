@@ -3,10 +3,10 @@ var fs = require("fs")
 var app = express();
 var PORT = process.env.PORT || 8080;
 var path = require("path");
-var savedNotes = require("db.json");
+var savedNotes = require("./db");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, 'public/assets')));
 
 
 // HTML Routes
@@ -17,8 +17,8 @@ app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "public/index.html"));
   });
 
-// API Routes
 
+// API Routes
 app.get("/api/notes", function(req, res) {
     res.json(savedNotes);
   });
@@ -26,9 +26,17 @@ app.get("/api/notes", function(req, res) {
   app.post("/api/notes", function(req, res) {
       savedNotes.push(req.body)
   });
+  app.get("/api/notes/:id", function(req,res){
+fs.readFile(savedNotes, function(err, data){
+console.log(data)
+
+})
+
+  }) 
 //   * POST `/api/notes` - Should receive a new note to save on the request body,
 // add it to the `db.json` file, and then return the new note to the client.
 app.delete("/api/notes/:id", function(req, res){
+    fs.readFile(title)
     // Insert corrected savedNotes section.
 })
 

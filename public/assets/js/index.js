@@ -1,9 +1,8 @@
-var $noteTitle = $(".note-title");
+var $noteTitle = $(".note-title"); 
 var $noteText = $(".note-textarea");
 var $saveNoteBtn = $(".save-note");
 var $newNoteBtn = $(".new-note");
 var $noteList = $(".list-container .list-group");
-
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
 
@@ -141,3 +140,7 @@ $noteText.on("keyup", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
 getAndRenderNotes();
+
+// Grab the text from the title and body
+// Request from body on the server
+// onclick submit AJAX post of title/body
