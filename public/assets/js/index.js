@@ -117,8 +117,8 @@ var renderNoteList = function(notes) {
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
     );
 
-    $li.append($span, $delBtn);
-    noteListItems.push($li);
+  $li.append($span, $delBtn);
+  noteListItems.push($li);
   }
 
   $noteList.append(noteListItems);
@@ -137,10 +137,4 @@ $newNoteBtn.on("click", handleNewNoteView);
 $noteList.on("click", ".delete-note", handleNoteDelete);
 $noteTitle.on("keyup", handleRenderSaveBtn);
 $noteText.on("keyup", handleRenderSaveBtn);
-
-// Gets and renders the initial list of notes
 getAndRenderNotes();
-
-// Grab the text from the title and body
-// Request from body on the server
-// onclick submit AJAX post of title/body

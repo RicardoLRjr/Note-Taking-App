@@ -3,11 +3,14 @@ var fs = require("fs")
 var app = express();
 var PORT = process.env.PORT || 8080;
 var path = require("path");
-var savedNotes = require("./db");
+var savedNotes = require("./db.json");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public/assets')));
+app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+console.log(savedNotes);
 
 // HTML Routes
 app.get("/notes", function(req, res) {
@@ -20,19 +23,29 @@ app.get("*", function(req, res) {
 
 // API Routes
 app.get("/api/notes", function(req, res) {
-    res.json(savedNotes);
-  });
-
-  app.post("/api/notes", function(req, res) {
-      savedNotes.push(req.body)
-  });
-  app.get("/api/notes/:id", function(req,res){
-fs.readFile(savedNotes, function(err, data){
-console.log(data)
-
+    fs.readFile(savedNotes, function(err, data){
+        if(err){
+            return res.send("you made an error")
+        }
+        const pastNotes = json.parse(data)
+        res.json(pastNotes)
 })
-
-  }) 
+  });
+res.json(savedNotes);
+app.post("/api/notes", function(req, res) {
+        var newNote = req.body; 
+        console.log(newNote);
+        fs.writeFile("db.js", newNote + '\n', function(err) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              console.log("Commit logged!");
+            }
+       res.json(newNote)   
+          })
+          
+  });
 //   * POST `/api/notes` - Should receive a new note to save on the request body,
 // add it to the `db.json` file, and then return the new note to the client.
 app.delete("/api/notes/:id", function(req, res){
@@ -47,6 +60,6 @@ app.delete("/api/notes/:id", function(req, res){
 // and then rewrite the notes to the `db.json` file.
 
 app.listen(PORT, function() {
-    console.log("App listening on PORT: " + PORT);
+    console.log("localhost:" + PORT);
   });
   
