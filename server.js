@@ -8,10 +8,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-console.log(savedNotes);
-
 // HTML Routes
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "public/notes.html"));
@@ -30,12 +26,39 @@ app.get("/api/notes", function(req, res) {
         const pastNotes = json.parse(data)
         res.json(pastNotes)
 })
+ });
+
+app.get("/api/db.json/:id", function(req, res) {
+    const index = parseInt(req.params.id);
+    console.log(index);
+  
+    if (isNaN(index)) {
+      res.status(400);
+      return res.send("there is not an id at this location");
+    }
+  
+    fs.readFile("db.json", function(err, data) {
+      if (err) {
+          console.log(err);
+        res.status(500);
+        return res.send("Something broke here...");
+      }
+      const pastNotes = JSON.parse(data);
+      if (index >= 0 && index < pastNotes.length) {
+        res.json(pastNotes[index]);
+        console.log("index function worked")
+      } else {
+        res.status(404);
+        return res.send("Error,there is no note here");
+      }
+    });
   });
-res.json(savedNotes);
+
+
 app.post("/api/notes", function(req, res) {
         var newNote = req.body; 
         console.log(newNote);
-        fs.writeFile("db.js", newNote + '\n', function(err) {
+        fs.appendFile("db.json", newNote + '\n', function(err) {
             if (err) {
               console.log(err);
             }
@@ -60,6 +83,6 @@ app.delete("/api/notes/:id", function(req, res){
 // and then rewrite the notes to the `db.json` file.
 
 app.listen(PORT, function() {
-    console.log("localhost:" + PORT);
+    console.log("http://localhost:" + PORT);
   });
   
